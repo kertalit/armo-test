@@ -21,7 +21,6 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-
 void MainWindow::on_openimage_clicked()
 {
     QFileDialog dialog(this);
