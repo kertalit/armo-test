@@ -1,6 +1,7 @@
 #include "serverwindow.h"
 #include "./ui_serverwindow.h"
 #include <QTcpSocket>
+#include <QMessageBox>
 #include <QFile>
 #include <QPixmap>
 #include <QNetworkInterface>
@@ -15,13 +16,11 @@ ServerWindow::ServerWindow(QWidget *parent)
 
     auto ipAddressesList = QNetworkInterface::allAddresses();
 
-    for (int i = 0; i < ipAddressesList.size(); ++i) // range based for check
+    for (const auto& ipAddress : ipAddressesList)
     {
-        auto current = ipAddressesList.at(i);
-
-        if (current != QHostAddress::LocalHost && current.toIPv4Address()) // comment here
+        if (ipAddress != QHostAddress::LocalHost && ipAddress.toIPv4Address()) // comment here
         {
-            ui->netIntefaces->addItem(current.toString());
+            ui->netIntefaces->addItem(ipAddress.toString());
         }
     }
 
@@ -29,8 +28,6 @@ ServerWindow::ServerWindow(QWidget *parent)
     ui->netIntefaces->setCurrentIndex(ui->netIntefaces->count() - 1);
 
     ui->stopServer->setEnabled(false);
-
-
 }
 
 ServerWindow::~ServerWindow()
@@ -57,20 +54,21 @@ void ServerWindow::on_startServer_clicked()
 
     if (address.isNull())
     {
-        //error
+        QMessageBox::critical(this, "Error", "No servers available");
         return;
     }
 
-    if(!server->listen(address, 55535)) // port static const "PORT", if listen unvallid, if QHostAd
+    if(!server->listen(address, ServerWindow::PORT))
     {
-        //error
+        QMessageBox::critical(this, "Error", "Server is not started");
         return;
     }
 
     connect(server, &QTcpServer::newConnection, this, &ServerWindow::acceptConnection);
-    ui->logServer->setText("The server started on IP: " + address.toString()); //server->serverAddress().toString()); //check!! add port
-}
 
+    QString port;
+    ui->logServer->setText("The server started on IP: " + address.toString() + " Port: " + port.setNum(PORT));
+}
 
 void ServerWindow::on_stopServer_clicked()
 {
@@ -79,6 +77,6 @@ void ServerWindow::on_stopServer_clicked()
 
     server->close();
 
-    ui->logServer->setText("The server has stopped");  //check!!
+    ui->logServer->setText("The server has stopped");
 }
 

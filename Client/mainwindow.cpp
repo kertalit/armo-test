@@ -25,46 +25,50 @@ MainWindow::~MainWindow()
 void MainWindow::on_openimage_clicked()
 {
     QFileDialog dialog(this);
-    dialog.setNameFilter(tr("Images (*.png *.jpg) *.bmp"));
+    dialog.setNameFilter("Images (*.png *.jpg *.bmp)");
     if (!dialog.exec())
         return;
 
-    QStringList fileNames = dialog.selectedFiles();
+    auto fileNames = dialog.selectedFiles();
     if (fileNames.isEmpty())
         return;
+
     ui->imagePath->setText(fileNames.first());
 }
 
 void MainWindow::on_sendfile_clicked()
 {
-    if (ui->serverAddr->text().isEmpty())
+    auto address = QHostAddress(ui->serverAddr->text());
+
+    if (address.isNull())
     {
-        QMessageBox::warning(this, "Warning", "server address is empty");
-            return;
+        QMessageBox::warning(this, "Warning", "Invalid server address");
+        return;
     }
     if (ui->imagePath->text().isEmpty())
     {
-        QMessageBox::warning(this, "Warning", "image path is empty");
-            return;
+        QMessageBox::warning(this, "Warning", "Image path is empty");
+        return;
     }
 
-    auto addr = ui->serverAddr->text();
-    socket->connectToHost(QHostAddress(addr), 55535);
-
+    socket->connectToHost(address, PORT);
 }
 
 void MainWindow::SendFileToServer()
 {
-    auto imgPath = ui->imagePath->text();
+    QFile file(ui->imagePath->text());
 
-    QFile file(imgPath);
-    file.open(QIODevice::ReadOnly);
-    auto filebuf = file.readAll();
+    if(!file.open(QIODevice::ReadOnly))
+    {
+        QMessageBox::warning(this, "Warning", "File is not open");
+        return;
+    }
 
     QByteArray tosend;
     QDataStream stream(&tosend, QIODevice::WriteOnly);
+
     stream.setVersion(QDataStream::Qt_6_2);
-    stream << filebuf;
+    stream << file.readAll();
 
     socket->write(tosend);
     socket->disconnectFromHost();

@@ -24,9 +24,9 @@ private:
     void SendFileToServer();
     void ShowErrorMessage();
 
-private:
     Ui::MainWindow *ui;
     QTcpSocket* socket;
+    static const qint32 PORT = 55535;
 
 };
 #endif // MAINWINDOW_H

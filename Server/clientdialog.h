@@ -17,16 +17,15 @@ public:
     explicit ClientDialog(QTcpSocket* socket, QWidget *parent = nullptr);
     ~ClientDialog();
 
-    void showImage(const QByteArray& data);
-
 public slots:
     void readFile();
 
 private:
     QDataStream stream;
     QTcpSocket* socket;
-
     Ui::ClientDialog *ui;
+
+    void showImage(const QByteArray& data);
 };
 
 #endif // CLIENTDIALOG_H

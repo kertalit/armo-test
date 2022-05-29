@@ -20,13 +20,13 @@ public:
 private slots:
     void acceptConnection();
     void on_startServer_clicked();
-
     void on_stopServer_clicked();
-
 
 private:
     Ui::ServerWindow *ui;
     QTcpServer* server;
     QVector<ClientDialog*> clients;
+
+    static const qint32 PORT = 55535;
 };
 #endif // SERVERWINDOW_H

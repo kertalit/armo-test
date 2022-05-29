@@ -7,13 +7,15 @@
 
 ClientDialog::ClientDialog(QTcpSocket* socket, QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::ClientDialog),
-    socket(socket)
+    socket(socket),
+    ui(new Ui::ClientDialog)
 
 {
     ui->setupUi(this);
 
+    stream.setVersion(QDataStream::Qt_6_2);
     stream.setDevice(socket);
+
     connect(socket, &QTcpSocket::readyRead, this, &ClientDialog::readFile);
 }
 
@@ -24,7 +26,6 @@ ClientDialog::~ClientDialog()
 
 void ClientDialog::readFile()
 {
-    stream.setVersion(QDataStream::Qt_6_2);
     stream.startTransaction();
     QByteArray data;
     stream >> data;
@@ -40,12 +41,12 @@ void ClientDialog::readFile()
 
 void ClientDialog::showImage(const QByteArray& data)
 {
-  auto image = QImage::fromData(data);
+    auto image = QImage::fromData(data);
 
     if (image.isNull())
     {
-        QMessageBox::warning(this, "Warning", "Format invalied");
-            return;
+        QMessageBox::warning(this, "Warning", "Format is invalid");
+        return;
     }
 
     auto pmap = QPixmap::fromImage(image);
@@ -55,5 +56,4 @@ void ClientDialog::showImage(const QByteArray& data)
 
     show();
     exec();
-
 }
