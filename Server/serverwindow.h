@@ -27,6 +27,6 @@ private:
     QTcpServer* server;
     QVector<ClientDialog*> clients;
 
-    static const qint32 PORT = 55535;
+    static const quint16 PORT = 55535;
 };
 #endif // SERVERWINDOW_H

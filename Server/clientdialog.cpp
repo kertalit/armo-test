@@ -1,6 +1,5 @@
 #include "clientdialog.h"
 #include "ui_ClientDialog.h"
-#include <QImageReader>
 #include <QPixmap>
 #include <QImage>
 #include <QMessageBox>
