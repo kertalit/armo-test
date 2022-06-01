@@ -18,7 +18,7 @@ ServerWindow::ServerWindow(QWidget *parent)
 
     for (const auto& ipAddress : ipAddressesList)
     {
-        if (ipAddress != QHostAddress::LocalHost && ipAddress.toIPv4Address()) // comment here
+        if (ipAddress != QHostAddress::LocalHost && ipAddress.toIPv4Address()) // excpect localhost here, because it`s important to append it last
         {
             ui->netIntefaces->addItem(ipAddress.toString());
         }
@@ -43,7 +43,6 @@ void ServerWindow::acceptConnection()
     auto socket = server->nextPendingConnection();
     clients.push_back(new ClientDialog(socket, this));
 }
-
 
 void ServerWindow::on_startServer_clicked()
 {

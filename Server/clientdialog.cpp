@@ -49,7 +49,7 @@ void ClientDialog::showImage(const QByteArray& data)
     }
 
     auto pmap = QPixmap::fromImage(image);
-
+    //TODO: Implement ability to scale window and content for saveing image aspect ratio.
     ui->image->setPixmap(pmap);
     ui->image->setScaledContents(true);
 
