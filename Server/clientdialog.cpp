@@ -33,9 +33,6 @@ void ClientDialog::readFile()
         return;
 
     showImage(data);
-
-    socket->connect(socket, &QTcpSocket::disconnected, socket, &QObject::deleteLater);
-    socket->disconnectFromHost();
 }
 
 void ClientDialog::showImage(const QByteArray& data)
@@ -54,5 +51,4 @@ void ClientDialog::showImage(const QByteArray& data)
     ui->image->setScaledContents(true);
 
     show();
-    exec();
 }

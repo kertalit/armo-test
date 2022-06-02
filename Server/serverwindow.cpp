@@ -32,16 +32,14 @@ ServerWindow::ServerWindow(QWidget *parent)
 
 ServerWindow::~ServerWindow()
 {
-    for (auto c : clients)
-        delete c;
-
     delete ui;
 }
 
 void ServerWindow::acceptConnection()
 {
     auto socket = server->nextPendingConnection();
-    clients.push_back(new ClientDialog(socket, this));
+    auto client = std::make_unique<ClientDialog>(socket, this);
+    client->exec();
 }
 
 void ServerWindow::on_startServer_clicked()

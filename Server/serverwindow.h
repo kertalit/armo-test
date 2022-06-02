@@ -25,7 +25,6 @@ private slots:
 private:
     Ui::ServerWindow *ui;
     QTcpServer* server;
-    QVector<ClientDialog*> clients;
 
     static const quint16 PORT = 55535;
 };
