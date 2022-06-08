@@ -22,7 +22,7 @@ private slots:
 
 private:
     void SendFileToServer();
-    void ShowErrorMessage();
+    void ShowErrorMessage(QTcpSocket::SocketError);
 
     Ui::MainWindow *ui;
     QTcpSocket* socket;

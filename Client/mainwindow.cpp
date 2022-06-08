@@ -74,7 +74,7 @@ void MainWindow::SendFileToServer()
     socket->disconnectFromHost();
 }
 
-void MainWindow::ShowErrorMessage()
+void MainWindow::ShowErrorMessage(QTcpSocket::SocketError)
 {
     QMessageBox::critical(this, "Error", "Can't connect to host, check host address");
 }
