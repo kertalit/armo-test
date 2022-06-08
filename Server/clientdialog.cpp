@@ -12,7 +12,7 @@ ClientDialog::ClientDialog(QTcpSocket* socket, QWidget *parent) :
 {
     ui->setupUi(this);
 
-    stream.setVersion(QDataStream::Qt_6_2);
+    stream.setVersion(QDataStream::Qt_5_8);
     stream.setDevice(socket);
 
     connect(socket, &QTcpSocket::readyRead, this, &ClientDialog::readFile);

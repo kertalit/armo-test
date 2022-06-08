@@ -5,6 +5,7 @@
 #include <QFile>
 #include <QPixmap>
 #include <QNetworkInterface>
+#include <memory>
 
 ServerWindow::ServerWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -38,7 +39,7 @@ ServerWindow::~ServerWindow()
 void ServerWindow::acceptConnection()
 {
     auto socket = server->nextPendingConnection();
-    auto client = std::make_unique<ClientDialog>(socket, this);
+    std::unique_ptr<ClientDialog> client(new ClientDialog(socket, this));
     client->exec();
 }
 

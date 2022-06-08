@@ -4,6 +4,7 @@
 #include "qfiledialog.h"
 #include <QDataStream>
 #include <QString>
+#include <QHostAddress>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -13,7 +14,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
 
     connect(socket, &QTcpSocket::connected, this, &MainWindow::SendFileToServer);
-    connect(socket, &QTcpSocket::errorOccurred, this, &MainWindow::ShowErrorMessage);
+    connect(socket, SIGNAL(error(QTcpSocket::SocketError)), this, SLOT(MainWindow::ShowErrorMessage(QTcpSocket::SocketError)));
 }
 
 MainWindow::~MainWindow()
@@ -66,7 +67,7 @@ void MainWindow::SendFileToServer()
     QByteArray tosend;
     QDataStream stream(&tosend, QIODevice::WriteOnly);
 
-    stream.setVersion(QDataStream::Qt_6_2);
+    stream.setVersion(QDataStream::Qt_5_8);
     stream << file.readAll();
 
     socket->write(tosend);
